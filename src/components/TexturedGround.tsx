@@ -8,12 +8,12 @@ export function TexturedGround() {
   const texture = useTexture(TEXTURE_PATH);
 
   texture.wrapS = texture.wrapT = THREE.RepeatWrapping;
-  texture.repeat.set(10, 10); // repeat pattern
+  texture.repeat.set(10, 10);
 
   return (
     <mesh
       rotation={[-Math.PI / 2, 0, 0]}
-      position={[0, -1, 0]}
+      position={[0, -1.1, 0]}
       receiveShadow
     >
       <planeGeometry args={[100, 100]} />

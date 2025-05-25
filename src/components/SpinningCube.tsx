@@ -5,7 +5,7 @@ import { useKeyboardControls } from '../hooks/useKeyboardControls';
 
 export default function SpinningCube() {
   const ref = React.useRef<Mesh>(null);
-  const [position, setPosition] = React.useState<Vector3>(new Vector3(0, 0, 0));
+  const [position, setPosition] = React.useState<Vector3>(new Vector3(0, 3, 0));
   const onKeyPress = (key: string) => {
     const delta = 0.1;
     switch(key) {

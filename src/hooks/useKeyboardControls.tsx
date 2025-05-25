@@ -27,7 +27,7 @@ export function useKeyboardControls({
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       const key = e.key.toLowerCase();
-      if ('qweasd'.includes(key) && onKeyDown) {
+      if ('wasd '.includes(key) && onKeyDown) {
         onKeyDown(key);
       }
     };
@@ -39,7 +39,7 @@ export function useKeyboardControls({
   useEffect (() => {
     const handleKeyUp = (e: KeyboardEvent) => {
       const key = e.key.toLowerCase();
-      if ('wasd'.includes(key) && onKeyUp) {
+      if ('wasd '.includes(key) && onKeyUp) {
         onKeyUp(key);
       }
     };
