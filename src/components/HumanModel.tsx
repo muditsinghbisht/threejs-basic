@@ -26,7 +26,6 @@ const MODEL_PATH = import.meta.env.NODE_ENV == 'production' ? '/threejs/models/h
 
 export default function HumanModel({startPosition = new THREE.Vector3(0, 0, 0)}: HumanModelProps) {
   const group = useRef<THREE.Group>(null);
-  
   const { scene, animations } = useGLTF(MODEL_PATH);
   const { actions } = useAnimations(animations, group);
   const { camera } = useThree();
