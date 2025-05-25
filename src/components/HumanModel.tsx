@@ -3,6 +3,7 @@ import { useEffect, useRef, useState } from 'react';
 import { useKeyboardControls } from '../hooks/useKeyboardControls';
 import { useFrame, useThree } from '@react-three/fiber';
 import * as THREE from 'three';
+import { getPublicPath } from '../helper';
 
 interface HumanModelProps {
   startPosition?: THREE.Vector3;
@@ -22,9 +23,9 @@ const HumanModelAnimations  = {
   walk: 'HumanArmature|Man_Walk'
 } as const;
 
-const MODEL_PATH = import.meta.env.PROD ? '/threejs/models/human.glb': '/models/human.glb';
+const MODEL_PATH = getPublicPath() + '/models/human.glb';
 
-export default function HumanModel({startPosition = new THREE.Vector3(0, 0, 0)}: HumanModelProps) {
+export default function HumanModel({startPosition = new THREE.Vector3(0, -1, 0)}: HumanModelProps) {
   const group = useRef<THREE.Group>(null);
   const { scene, animations } = useGLTF(MODEL_PATH);
   const { actions } = useAnimations(animations, group);
@@ -32,30 +33,73 @@ export default function HumanModel({startPosition = new THREE.Vector3(0, 0, 0)}:
   const [position, setPosition] = useState<THREE.Vector3>(startPosition);
   const [rotation, setRotation] = useState<number>(0);
   const [currentAnimation, setCurrentAnimation] = useState<string>(HumanModelAnimations.idle);
+  const [isJumping, setIsJumping] = useState(false);
+
+  function updateCurrentAnimation(animation: string) {
+    if (!isJumping) {
+      setCurrentAnimation(animation);
+    }
+  }
+
+  const playJumpAnimation = () => {
+    const jumpAction = actions[HumanModelAnimations.jump];
+
+    if (jumpAction) {
+      // Set loop mode to play only once
+      jumpAction.setLoop(THREE.LoopOnce, 1);
+      jumpAction.clampWhenFinished = true;
+      jumpAction.reset().play();
+
+      // Listen for animation end to reset jump state
+      jumpAction.getMixer().addEventListener('finished', (e) => {
+        console.log('Jumping finished!');
+        setIsJumping(false);
+        // if (e.action === jumpAction) {
+        // }
+      });
+    }
+  };
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === ' ') {
+        if (!isJumping) {
+          setIsJumping(true);
+          playJumpAnimation();
+        }
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [isJumping]);
 
   const onKeyPress = (key: string) => {
-    const delta = 0.1;
+    const delta = 0.2;
     const deltaTheta = Math.PI / 360 * 15;
-    setCurrentAnimation(HumanModelAnimations.walk);
+    
+    console.log(`Key Press: "${key}"`);
     switch(key) {
       case 'w':
-        // setRotation(rot => [rot[0], rot[1] + Math.PI, rot[2]]);
+        updateCurrentAnimation(HumanModelAnimations.walk);
         return setPosition(pos => new THREE.Vector3(Math.sin(rotation), 0, Math.cos(rotation))
           .multiplyScalar(delta)
           .add(pos));
       case 's':
+        updateCurrentAnimation(HumanModelAnimations.walk);
         // setRotation(rot => rot + deltaTheta);
         return setPosition(pos => new THREE.Vector3(Math.sin(rotation), 0, Math.cos(rotation))
           .multiplyScalar(-1 * delta)
           .add(pos));
       case 'a':
+        updateCurrentAnimation(HumanModelAnimations.walk);
         return setRotation(rot => rot + deltaTheta);
         // return setPosition(pos => [pos[0] - delta, pos[1], pos[2]]);
       case 'd':
+        updateCurrentAnimation(HumanModelAnimations.walk);
         return setRotation(rot => rot - deltaTheta);
         // return setPosition(pos => [pos[0] + delta, pos[1], pos[2]]);
-      case 'q':
-        setCurrentAnimation(HumanModelAnimations.jump);
+      case ' ':
+        updateCurrentAnimation(HumanModelAnimations.jump);
         return;
     }
   }
@@ -67,7 +111,7 @@ export default function HumanModel({startPosition = new THREE.Vector3(0, 0, 0)}:
       case 's':
       case 'a':
       case 'd':
-        setCurrentAnimation(HumanModelAnimations.idle);
+        updateCurrentAnimation(HumanModelAnimations.idle);
     }
   }
 
@@ -94,6 +138,7 @@ export default function HumanModel({startPosition = new THREE.Vector3(0, 0, 0)}:
         .applyAxisAngle(new THREE.Vector3(0, 1, 0), rotation);
       const desiredPosition = targetPosition.clone().add(cameraOffset);
 
+      // console.log('Desired Position for camera: ', desiredPosition);
       // Smooth camera motion
       camera.position.lerp(desiredPosition, 0.1);
 

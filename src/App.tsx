@@ -2,6 +2,7 @@ import { Canvas } from '@react-three/fiber';
 import { OrbitControls, Stats } from '@react-three/drei';
 // import SpinningCube from './components/SpinningCube';
 import HumanModel from './components/HumanModel';
+import { TexturedGround } from './components/TexturedGround';
 
 function App() {
   return (
@@ -29,8 +30,9 @@ function App() {
         </mesh>
 
         {/* Add coordinate axes (X-red, Y-green, Z-blue) */}
-        <axesHelper args={[50]} />
+        {/* <axesHelper args={[50]} /> */}
 
+        <TexturedGround />
         {/* Mesh */}
         {/* <SpinningCube /> */}
 
