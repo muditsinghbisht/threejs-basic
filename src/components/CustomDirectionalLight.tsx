@@ -1,10 +1,8 @@
 
 import React, { useEffect } from 'react';
-// import { useHelper } from '@react-three/drei';
-import { CameraHelper, DirectionalLight, DirectionalLightHelper, Vector3 } from 'three';
+import { DirectionalLight, Vector3 } from 'three';
 import { useThree } from '@react-three/fiber';
-import { useControls } from 'leva';
-import { useHelper } from '@react-three/drei';
+import { useDirectionalLightHelper } from '../hooks/useDirectionalLightHelper';
 
 interface DirectionalLightProps {
   targetPosition: Vector3;
@@ -13,21 +11,10 @@ interface DirectionalLightProps {
 export function CustomDirectionalLight({ targetPosition }: DirectionalLightProps) {
 
   const dirLightRef = React.useRef<DirectionalLight>(null);
-
-  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-  // @ts-expect-error
-  useHelper(dirLightRef, DirectionalLightHelper, 1);
-
-  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-  // @ts-expect-error
-  useHelper(dirLightRef.current?.shadow?.camera, CameraHelper);
-
+  const { position } = useDirectionalLightHelper(dirLightRef);
   const { scene } = useThree();
-  const { lightPositionX, lightPositionY, lightPositionZ } = useControls({
-    lightPositionX: { value: 0, min: -30, max: 30 },
-    lightPositionY: { value: 10, min: 0, max: 100 },
-    lightPositionZ: { value: 0, min: -30, max: 30 }
-  });
+
+  
 
   useEffect(() => {
     if (dirLightRef.current) {
@@ -44,7 +31,7 @@ export function CustomDirectionalLight({ targetPosition }: DirectionalLightProps
   return (<directionalLight
             ref={dirLightRef}
             castShadow
-            position={[lightPositionX, lightPositionY, lightPositionZ]}
+            position={position}
             shadow-mapSize-width={1024}
             shadow-mapSize-height={1024}
             shadow-camera-near={1}

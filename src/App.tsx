@@ -5,10 +5,11 @@ import { TexturedGround } from './components/TexturedGround';
 import { CustomDirectionalLight } from './components/CustomDirectionalLight';
 import { Vector3 } from 'three';
 import { useState } from 'react';
+import { useDebugFlag } from './hooks/useDebugFlag';
 
 function App() {
   const [position, setPosition] = useState(new Vector3(0, -1, 0));
-  const debug = false;
+  const debug = useDebugFlag();
 
   return (
     <div style={{ width: '100vw', height: '100vh' }}>
