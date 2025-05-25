@@ -1,8 +1,17 @@
 {
-  "name": "threejs-portfolio",
-  "private": true,
+  "name": "threejs-basic",
+  "private": false,
   "version": "0.0.0",
   "type": "module",
+  "author": {
+    "name": "Mudit Singh Bisht",
+    "email": "muditsinghbist@gmail.com",
+    "url": "https://muditsinghbist.in"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/muditsinghbisht/threejs-basic"
+  },
   "scripts": {
     "dev": "vite",
     "build": "tsc -b && vite build",
