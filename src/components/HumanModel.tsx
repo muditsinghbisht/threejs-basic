@@ -24,7 +24,7 @@ const HumanModelAnimations  = {
 
 export default function HumanModel({startPosition = new THREE.Vector3(0, 0, 0)}: HumanModelProps) {
   const group = useRef<THREE.Group>(null);
-  const { scene, animations } = useGLTF('/models/human.glb'); // relative to public/
+  const { scene, animations } = useGLTF('models/human.glb'); // relative to public/
   const { actions } = useAnimations(animations, group);
   const { camera } = useThree();
   const [position, setPosition] = useState<THREE.Vector3>(startPosition);
