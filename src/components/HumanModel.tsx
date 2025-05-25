@@ -51,11 +51,9 @@ export default function HumanModel({startPosition = new THREE.Vector3(0, -1, 0)}
       jumpAction.reset().play();
 
       // Listen for animation end to reset jump state
-      jumpAction.getMixer().addEventListener('finished', (e) => {
+      jumpAction.getMixer().addEventListener('finished', () => {
         console.log('Jumping finished!');
         setIsJumping(false);
-        // if (e.action === jumpAction) {
-        // }
       });
     }
   };
