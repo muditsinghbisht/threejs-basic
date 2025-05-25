@@ -22,7 +22,7 @@ const HumanModelAnimations  = {
   walk: 'HumanArmature|Man_Walk'
 } as const;
 
-const MODEL_PATH = import.meta.env.NODE_ENV == 'production' ? '/threejs/models/human.glb': '/models/human.glb';
+const MODEL_PATH = import.meta.env.PROD ? '/threejs/models/human.glb': '/models/human.glb';
 
 export default function HumanModel({startPosition = new THREE.Vector3(0, 0, 0)}: HumanModelProps) {
   const group = useRef<THREE.Group>(null);
