@@ -22,9 +22,12 @@ const HumanModelAnimations  = {
   walk: 'HumanArmature|Man_Walk'
 } as const;
 
+const MODEL_PATH = import.meta.env.NODE_ENV == 'production' ? '/threejs/models/human.glb': '/models/human.glb';
+
 export default function HumanModel({startPosition = new THREE.Vector3(0, 0, 0)}: HumanModelProps) {
   const group = useRef<THREE.Group>(null);
-  const { scene, animations } = useGLTF('models/human.glb'); // relative to public/
+  
+  const { scene, animations } = useGLTF(MODEL_PATH);
   const { actions } = useAnimations(animations, group);
   const { camera } = useThree();
   const [position, setPosition] = useState<THREE.Vector3>(startPosition);
