@@ -6,6 +6,7 @@ import { CustomDirectionalLight } from './components/CustomDirectionalLight';
 import { Vector3 } from 'three';
 import { useState } from 'react';
 import { useDebugFlag } from './hooks/useDebugFlag';
+import { TexturedWall } from './components/TexturedWall';
 
 function App() {
   const [position, setPosition] = useState(new Vector3(0, -1, 0));
@@ -23,6 +24,7 @@ function App() {
         <TexturedGround />
 
         <HumanModel position={position} setPosition={setPosition}/>
+        <TexturedWall />
 
         {/* Controls */}
         <OrbitControls />
